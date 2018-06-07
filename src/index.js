@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+/* Components */
+import TodoList from './components/todo-list'
+
 ReactDOM.render(
-  <div>
-    <h1>React JSX</h1>
-    <button>Button</button>
-  </div>,
+  <TodoList />,
   document.getElementById('app')
 )

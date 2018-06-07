@@ -16,5 +16,8 @@ module.exports = {
       template: path.join(__dirname, 'index.html'),
       hash: true,
     })
-  ]
+  ],
+  resolve: {
+    extensions: ['.js', '.jsx']
+  }
 }
