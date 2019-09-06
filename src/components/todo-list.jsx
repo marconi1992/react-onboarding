@@ -1,61 +1,43 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 /* Components */
 import TodoListItem from './todo-list-item'
 
-class TodoList extends React.Component {
-  state = {
-    items: [
-      {
-        content: 'First Item',
-        completed: true
-      },
-      {
-        content: 'Second Item',
-        completed: false
-      }
-    ],
-    input: ''
-  }
-  
+/* Actions */
+import { addItem, setInput, setCompleted } from '../actions'
+
+class TodoList extends React.Component {  
   renderItem = (item, idx) => {
     return (
      <TodoListItem 
       key={idx} 
-      content={item.content} 
-      completed={item.completed} 
-      onChange={(completed) => this.setItemCompleted(idx, completed)}
+      {...item}
+      onChange={(completed) => this.props.setCompleted(idx, completed)}
     />
     )
   }
 
   onChange = (evt) => {
-    this.setState({ input: evt.target.value })
-  }
-
-  setItemCompleted = (idx, completed) => {
-    const newItems = this.state.items
-    const newItem = newItems[idx]
-    newItems[idx] = { ...newItem , completed }
-    this.setState({ items: newItems })
+    const { setInput } = this.props
+    setInput(evt.target.value)
   }
 
   addItem = () => {
-    const { items, input } = this.state
-    items.push({
-      content: input,
-      completed: false
-    })
-    this.setState({ input: '', items })
+    const { input, addItem } = this.props
+    
+    if (input) {
+      addItem()
+    }
   }
 
   render() {
-    const { items, input } = this.state
+    const { items, input } = this.props
     return (
       <div>
         <p>To Do</p>
         <div>
-          <input value={input} onChange={this.onChange}/>
+          <input defaultValue={input} onChange={this.onChange}/>
           <button onClick={this.addItem}>Add</button>
         </div>
         <ul>
@@ -66,4 +48,12 @@ class TodoList extends React.Component {
   }
 }
 
-export default TodoList
+const mapStateToProps = ({ items, input }) => ({ items, input })
+
+const mapDispatchToProps = {
+  addItem,
+  setInput,
+  setCompleted
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList)
